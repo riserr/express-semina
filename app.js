@@ -8,9 +8,13 @@ const app = express();
 //Import Router from /app/api/v1/categories/router.js
 const categoriesRouter = require("./app/api/v1/categories/router");
 
+const imagesRouter = require("./app/api/v1/images/router");
+
 //Import middleware
-const handlerErrorMiddleware = require("./app/middlewares/handler-error");
-const notFoundMiddleware = require("./app/middlewares/not-found");
+const {
+  HandlerErrorMiddleware,
+  NotFoundMiddleware,
+} = require("./app/middlewares");
 
 //Define Variable
 const v1 = "/api/v1";
@@ -31,9 +35,10 @@ app.get("/", (req, res) => {
 
 //Use categoriesRouter
 app.use(`${v1}/cms`, categoriesRouter);
+app.use(`${v1}/cms`, imagesRouter);
 
 //Use Middleware
-app.use(notFoundMiddleware);
-app.use(handlerErrorMiddleware);
+app.use(NotFoundMiddleware);
+app.use(HandlerErrorMiddleware);
 
 module.exports = app;

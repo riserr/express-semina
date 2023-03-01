@@ -24,16 +24,7 @@ const getOneCategories = async (req, res) => {
 
   const result = await Categories.findOne({ _id: id });
 
-  //Menampilkan REsponse kosong jika mencari kategori yang tidak ada
   if (!result) throw new NotFoundError(`Tidak ada kategori dengan id ${id}`);
-
-  /* Berhasil Menampilkan response jika kategori tidak ada
-  if (!result) {
-    res
-      .status(StatusCodes.NOT_FOUND)
-      .json({ status: "error", message: "kategori tidak ada" });
-  }
-  */
 
   return result;
 };

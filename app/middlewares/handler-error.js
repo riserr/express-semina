@@ -4,7 +4,7 @@ const handlerErrorMiddleware = (err, req, res, next) => {
   let customError = {
     // set default
     statusCode: err.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
-    message: err.message || "Something went wrong try again later",
+    msg: err.message || "Something went wrong try again later",
   };
   // error validation dari mongoose
   if (err.name === "ValidationError") {
@@ -25,7 +25,9 @@ const handlerErrorMiddleware = (err, req, res, next) => {
     customError.statusCode = StatusCodes.NOT_FOUND;
   }
 
-  res.status(customError.statusCode).json({ message: customError.msg });
+  res
+    .status(customError.statusCode)
+    .json({ status: "error", message: customError.msg });
 };
 
 module.exports = handlerErrorMiddleware;
