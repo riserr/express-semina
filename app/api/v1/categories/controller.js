@@ -48,7 +48,7 @@ const index = async (req, res, next) => {
 const find = async (req, res, next) => {
   try {
     //Find categories on MongoDB by field_id
-    const result = await getOneCategories(req, res);
+    const result = await getOneCategories(req);
 
     //Give respond to client
     res.status(StatusCodes.OK).json({

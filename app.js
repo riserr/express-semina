@@ -10,6 +10,8 @@ const categoriesRouter = require("./app/api/v1/categories/router");
 
 const imagesRouter = require("./app/api/v1/images/router");
 
+const talentsRouter = require("./app/api/v1/talents/router");
+
 //Import middleware
 const {
   HandlerErrorMiddleware,
@@ -36,6 +38,7 @@ app.get("/", (req, res) => {
 //Use categoriesRouter
 app.use(`${v1}/cms`, categoriesRouter);
 app.use(`${v1}/cms`, imagesRouter);
+app.use(`${v1}/cms`, talentsRouter);
 
 //Use Middleware
 app.use(NotFoundMiddleware);

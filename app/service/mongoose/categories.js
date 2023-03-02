@@ -19,7 +19,7 @@ const getAllCategories = async () => {
   return result;
 };
 
-const getOneCategories = async (req, res) => {
+const getOneCategories = async (req) => {
   const { id } = req.params;
 
   const result = await Categories.findOne({ _id: id });
