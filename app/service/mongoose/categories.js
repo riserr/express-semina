@@ -33,7 +33,10 @@ const updateCategories = async (req) => {
   const { id } = req.params;
   const { name } = req.body;
 
-  const check = await Categories.findOne({ name, _id: { $ne: id } });
+  const check = await Categories.findOne({
+    name,
+    _id: { $ne: id },
+  });
 
   if (check) throw new BadRequestError("kategori nama sudah ada");
 
@@ -51,7 +54,9 @@ const updateCategories = async (req) => {
 const deleteCategories = async (req) => {
   const { id } = req.params;
 
-  const result = await Categories.findOne({ _id: id });
+  const result = await Categories.findOne({
+    _id: id,
+  });
 
   if (!result) throw new NotFoundError(`Tidak ada Kategori dengan id :  ${id}`);
 
@@ -60,10 +65,16 @@ const deleteCategories = async (req) => {
   return result;
 };
 
+const checkingCategories = async (id) => {
+  const result = await Categories.findOne({ _id: id });
+  if (!result) throw new NotFoundError(`Tidak ada kategori dengan id : ${id}`);
+};
+
 module.exports = {
   createCategories,
   getAllCategories,
   getOneCategories,
   updateCategories,
   deleteCategories,
+  checkingCategories,
 };

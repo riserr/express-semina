@@ -1,34 +1,30 @@
 const {
-  createCategories,
-  getAllCategories,
-  getOneCategories,
-  updateCategories,
-  deleteCategories,
-} = require("../../../service/mongoose/categories");
+  createEvents,
+  getAllEvents,
+  getOneEvents,
+  updateEvents,
+  deleteEvents,
+} = require("../../../service/mongoose/events");
 
 const { StatusCodes } = require("http-status-codes");
 
-//Create function create
 const create = async (req, res, next) => {
   try {
-    const result = await createCategories(req);
+    const result = await createEvents(req);
 
-    //Give response to client
     res.status(StatusCodes.CREATED).json({
       status: "success",
       data: result,
     });
   } catch (err) {
-    //If mistakes happen use NEXT method so Express can process the error
     next(err);
   }
 };
 
-//Create function index for list categories
 const index = async (req, res, next) => {
   try {
     //Find categories on MongoDB
-    const result = await getAllCategories(req);
+    const result = await getAllEvents(req);
 
     //Give respond to client
     res.status(StatusCodes.OK).json({
@@ -41,13 +37,10 @@ const index = async (req, res, next) => {
   }
 };
 
-//Create function findbyid
 const find = async (req, res, next) => {
   try {
-    //Find categories on MongoDB by field_id
-    const result = await getOneCategories(req);
+    const result = await getOneEvents(req);
 
-    //Give respond to client
     res.status(StatusCodes.OK).json({
       status: "success",
       data: result,
@@ -59,9 +52,8 @@ const find = async (req, res, next) => {
 
 const update = async (req, res, next) => {
   try {
-    const result = await updateCategories(req);
+    const result = await updateEvents(req);
 
-    //Give respond to client
     res.status(StatusCodes.OK).json({
       status: "success",
       data: result,
@@ -73,19 +65,17 @@ const update = async (req, res, next) => {
 
 const destroy = async (req, res, next) => {
   try {
-    await deleteCategories(req);
+    await deleteEvents(req);
 
-    //Give respond to client
     res.status(StatusCodes.OK).json({
       status: "success",
-      message: "kategori berhasil dihapus",
+      message: "nama event berhasil dihapus",
     });
   } catch (err) {
     next(err);
   }
 };
 
-//Export functions
 module.exports = {
   create,
   index,
