@@ -8,7 +8,7 @@ const userSchema = Schema(
       type: String,
       required: [true, "nama harus diisi"],
       minlength: [3, " nama minimal 3 karakter"],
-      maxlength: [, "nama maksimal 50 karakter"],
+      maxlength: [50, "nama maksimal 50 karakter"],
     },
     email: {
       type: String,

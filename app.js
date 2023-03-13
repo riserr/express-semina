@@ -14,7 +14,7 @@ const talentsRouter = require("./app/api/v1/talents/router");
 
 const eventsRouter = require("./app/api/v1/events/router");
 
-const organizerRouter = require("./app/api/v1/organizers/router");
+const organizersRouter = require("./app/api/v1/organizers/router");
 
 //Import middleware
 const {
@@ -44,7 +44,7 @@ app.use(`${v1}/cms`, categoriesRouter);
 app.use(`${v1}/cms`, imagesRouter);
 app.use(`${v1}/cms`, talentsRouter);
 app.use(`${v1}/cms`, eventsRouter);
-app.use(`${v1}/cms`, organizerRouter);
+app.use(`${v1}/cms`, organizersRouter);
 
 //Use Middleware
 app.use(NotFoundMiddleware);
