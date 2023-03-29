@@ -1,20 +1,27 @@
-const { StatusCodes } = require("http-status-codes");
 const Categories = require("../../api/v1/categories/model");
 const { NotFoundError, BadRequestError } = require("../../errors");
 
 const createCategories = async (req) => {
   const { name } = req.body;
 
-  const check = await Categories.findOne({ name });
+  const check = await Categories.findOne({
+    name,
+    organizer: req.user.organizer,
+  });
   if (check) throw new BadRequestError("kategori nama sudah ada");
 
-  const result = await Categories.create({ name });
+  const result = await Categories.create({
+    name,
+    organizer: req.user.organizer,
+  });
 
   return result;
 };
 
-const getAllCategories = async () => {
-  const result = await Categories.find();
+const getAllCategories = async (req) => {
+  const result = await Categories.find({
+    organizer: req.user.organizer,
+  }).select("_id name");
 
   return result;
 };
@@ -22,7 +29,10 @@ const getAllCategories = async () => {
 const getOneCategories = async (req) => {
   const { id } = req.params;
 
-  const result = await Categories.findOne({ _id: id });
+  const result = await Categories.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  });
 
   if (!result) throw new NotFoundError(`Tidak ada kategori dengan id ${id}`);
 
@@ -34,8 +44,9 @@ const updateCategories = async (req) => {
   const { name } = req.body;
 
   const check = await Categories.findOne({
-    name,
     _id: { $ne: id },
+    name,
+    organizer: req.user.organizer,
   });
 
   if (check) throw new BadRequestError("kategori nama sudah ada");
@@ -56,6 +67,7 @@ const deleteCategories = async (req) => {
 
   const result = await Categories.findOne({
     _id: id,
+    organizer: req.user.organizer,
   });
 
   if (!result) throw new NotFoundError(`Tidak ada Kategori dengan id :  ${id}`);
