@@ -11,12 +11,14 @@ router.post(
   authorizedRoles("owner"),
   createCMSOrganizer
 );
+
 router.post(
   "/users",
   authenticatedUser,
   authorizedRoles("organizer"),
   createCMSUser
 );
+
 router.get("/users", authenticatedUser, authorizedRoles("owner"), index);
 
 module.exports = router;

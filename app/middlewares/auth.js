@@ -37,4 +37,7 @@ const authorizedRoles = (...roles) => {
   };
 };
 
-module.exports = { authenticatedUser, authorizedRoles };
+module.exports = {
+  authenticatedUser,
+  authorizedRoles,
+};

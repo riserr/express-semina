@@ -2,40 +2,34 @@ const Talents = require("../../api/v1/talents/model");
 const { checkingImage } = require("./images");
 const { BadRequestError, NotFoundError } = require("../../errors");
 
-const router = require("express").Router();
-const { create } = require("../../api/v1/images/controller");
-const upload = require("../../middlewares/multer");
-
 const createTalents = async (req) => {
-  const { name, role, image } = req.body;
+  const { name, job, image } = req.body;
 
   await checkingImage(image);
 
-  const check = await Talents.findOne({ name });
+  const check = await Talents.findOne({ name, organizer: req.user.organizer });
 
   if (check) throw new BadRequestError("Terdapat duplikat nama pembicara");
 
-  const result = await Talents.create({ name, image, role });
+  const result = await Talents.create({
+    name,
+    job,
+    image,
+    organizer: req.user.organizer,
+  });
 
   return result;
 };
 
 const getAllTalents = async (req) => {
-  const { name, role } = req.query;
+  const { keyword } = req.query;
 
-  let condition = {};
+  let condition = { organizer: req.user.organizer };
 
-  if (name) {
+  if (keyword) {
     condition = {
       ...condition,
-      name: { $regex: name, $options: "i" },
-    };
-  }
-
-  if (role) {
-    condition = {
-      ...condition,
-      role: { $regex: role, $options: "i" },
+      name: { $regex: keyword, $options: "i" },
     };
   }
 
@@ -44,7 +38,10 @@ const getAllTalents = async (req) => {
       path: "image",
       select: "_id name",
     })
-    .select("_id name role image");
+    .select("_id name job image");
+
+  if (!result.length)
+    throw new NotFoundError(`Tidak ada pembicara dengan keyword ${keyword}`);
 
   return result;
 };
@@ -52,12 +49,15 @@ const getAllTalents = async (req) => {
 const getOneTalents = async (req) => {
   const { id } = req.params;
 
-  const result = await Talents.findOne({ _id: id })
+  const result = await Talents.findOne({
+    _id: id,
+    organizer: req.user.organizer,
+  })
     .populate({
       path: "image",
       select: "_id name",
     })
-    .select("_id name role range");
+    .select("_id name job range");
 
   if (!result) throw new NotFoundError(`Tidak ada pembicara dengan id : ${id}`);
 
@@ -66,20 +66,21 @@ const getOneTalents = async (req) => {
 
 const updateTalents = async (req) => {
   const { id } = req.params;
-  const { name, image, role } = req.body;
+  const { name, job, image } = req.body;
 
   await checkingImage(image);
 
   const check = await Talents.findOne({
     name,
     _id: { $ne: id },
+    organizer: req.user.organizer,
   });
 
   if (check) throw new BadRequestError("Terdapat duplikat nama pembicara");
 
   const result = await Talents.findOneAndUpdate(
     { _id: id },
-    { name, image, role },
+    { name, job, image, organizer: req.user.organizer },
     { new: true, runValidators: true }
   );
 
@@ -91,7 +92,10 @@ const updateTalents = async (req) => {
 const deleteTalents = async (req) => {
   const { id } = req.params;
 
-  const result = await Talents.findByIdAndRemove(id);
+  const result = await Talents.findOneAndDelete({
+    _id: id,
+    organizer: req.user.organizer,
+  });
 
   if (!result) throw new NotFoundError(`Tidak ada pembicara dengan id : ${id}`);
 

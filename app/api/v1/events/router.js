@@ -9,11 +9,36 @@ const {
   updateStatus,
 } = require("./controller");
 
-router.get("/events", index);
-router.get("/events/:id", find);
-router.put("/events/:id", update);
-router.delete("/events/:id", destroy);
-router.post("/events", create);
-router.put("/events/:id/status", updateStatus);
+const {
+  authenticatedUser,
+  authorizedRoles,
+} = require("../../../middlewares/auth");
+
+router.get("/events", authenticatedUser, authorizedRoles("organizer"), index);
+router.get(
+  "/events/:id",
+  authenticatedUser,
+  authorizedRoles("organizer"),
+  find
+);
+router.put(
+  "/events/:id",
+  authenticatedUser,
+  authorizedRoles("organizer"),
+  update
+);
+router.delete(
+  "/events/:id",
+  authenticatedUser,
+  authorizedRoles("organizer"),
+  destroy
+);
+router.post("/events", authenticatedUser, authorizedRoles("organizer"), create);
+router.put(
+  "/events/:id/status",
+  authenticatedUser,
+  authorizedRoles("organizer"),
+  updateStatus
+);
 
 module.exports = router;

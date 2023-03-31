@@ -1,10 +1,38 @@
 const router = require("express").Router();
-const { create, index, find, update, destroy } = require("./controller");
+const { index, create, destroy, find, update } = require("./controller");
+const {
+  authenticatedUser,
+  authorizedRoles,
+} = require("../../../middlewares/auth");
 
-router.post("/talents", create);
-router.get("/talents", index);
-router.get("/talents/:id", find);
-router.put("/talents/:id", update);
-router.delete("/talents/:id", destroy);
+router.get("/talents", authenticatedUser, authorizedRoles("organizer"), index);
+
+router.post(
+  "/talents",
+  authenticatedUser,
+  authorizedRoles("organizer"),
+  create
+);
+
+router.get(
+  "/talents/:id",
+  authenticatedUser,
+  authorizedRoles("organizer"),
+  find
+);
+
+router.put(
+  "/talents/:id",
+  authenticatedUser,
+  authorizedRoles("organizer"),
+  update
+);
+
+router.delete(
+  "/talents/:id",
+  authenticatedUser,
+  authorizedRoles("organizer"),
+  destroy
+);
 
 module.exports = router;
