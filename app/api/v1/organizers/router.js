@@ -1,9 +1,16 @@
 const router = require("express").Router();
-const { createCMSOrganizer, createCMSUser, index } = require("./controller");
+const {
+  createCMSOwner,
+  createCMSOrganizer,
+  createCMSUser,
+  index,
+} = require("./controller");
 const {
   authenticatedUser,
   authorizedRoles,
 } = require("../../../middlewares/auth");
+
+router.post("/owners", createCMSOwner);
 
 router.post(
   "/organizers",

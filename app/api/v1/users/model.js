@@ -21,9 +21,12 @@ const userSchema = Schema(
       minlength: [6, "password minimal 6 karakter"],
     },
     role: {
-      type: String,
+      type: mongoose.Types.ObjectId,
+      ref: "Role",
+      required: true,
+      /*type: String,
       enum: ["admin", "organizer", "owner"],
-      default: "admin",
+      default: "admin",*/
     },
     organizer: {
       type: mongoose.Types.ObjectId,
